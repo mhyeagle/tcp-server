@@ -1,8 +1,11 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
+#include <unistd.h>
 #include <sys/socket.h>
 #include <sys/types.h>
+#include <netinet/in.h>
 
 void error(char *msg) {
     perror(msg);
@@ -47,6 +50,8 @@ int main(int argc, char *argv[]) {
     n = write(newsockfd, "I got your message", 18);
     if (n < 0)
         error("ERROR writing to socket");
+
+	sleep(1);//add sleep(1) make TIME_WAIT state to client
 
     return 0;
 }
