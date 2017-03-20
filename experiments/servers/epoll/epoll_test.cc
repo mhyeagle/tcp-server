@@ -27,7 +27,7 @@ static int create_and_bind(char *port) {
 	}
 
 	for(rp = result; rp != NULL; rp = rp->ai_next) {
-		sfd = socket(rp->ai_familly, rp->ai_socktype, rp->ai_protocol);
+		sfd = socket(rp->ai_family, rp->ai_socktype, rp->ai_protocol);
 		if (sfd == -1)
 			continue;
 
@@ -54,7 +54,7 @@ static int make_socket_non_blocking(int fd) {
 
 	flags = fcntl(fd, F_GETFL, 0);
 	if (flags == -1) {
-		fprintf(stderr "fcntl get failed.");
+		fprintf(stderr, "fcntl get failed.");
 		return -1;
 	}
 
@@ -93,7 +93,7 @@ int main(int argc, char **argv) {
 		return -1;
 	}
 
-	efd = epoll_create(0);
+	efd = epoll_create(1);
 	if (efd == -1) {
 		fprintf(stderr, "epoll_create failed.\n");
 		return -1;
@@ -107,7 +107,7 @@ int main(int argc, char **argv) {
 		return -1;
 	}
 
-	events = calloc(MAXEVENTS, sizeof(event));
+	events = (epoll_event*)calloc(MAXEVENTS, sizeof(event));
 
 	while(1) {
 		int n, i;
@@ -133,7 +133,7 @@ int main(int argc, char **argv) {
 							(errno == EWOULDBLOCK)) {
 							break;
 						} else {
-							fprintf(stderr, "accept\n");
+							fprintf(stderr, "accept failed\n");
 							break;
 						}
 					}
@@ -144,7 +144,7 @@ int main(int argc, char **argv) {
 					}
 
 					event.data.fd = infd;
-					event.events = EPOLLIN | SPOLLET;
+					event.events = EPOLLIN | EPOLLET;
 					s = epoll_ctl(efd, EPOLL_CTL_ADD, infd, &event);
 					if (s == -1) {
 						fprintf(stderr, "epoll_ctl\n");
