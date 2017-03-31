@@ -21,8 +21,6 @@ public:
     }
 
 	static void* worker_func(void* arg);
-    int run(NKTask* task);
-    int run(std::vector<NKTask*>& tasks);
 
 private:
 	int create_workers(int size) {
