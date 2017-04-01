@@ -5,34 +5,33 @@
 #include <memory>
 #include <pthread.h>
 
-template<class T>
-class NkQueue {
+#include "nktask.h"
+
+class NKQueue {
 public:
-    NkQueue() {
+    NKQueue() {
         pthread_mutex_init(&mutex__, NULL);
         pthread_cond_init(&cond__, NULL);
-        queue__ = std::make_shared<std::queue<T> >();
+        queue__ = std::make_shared<std::queue<NKTask*> >();
     }
 
-    ~NkQueue() {}
+    ~NKQueue() {}
 
     int reserve(int size);
-    int push(T&);
-    int pop(T&);
+    int push(NKTask* task);
+    int pop(NKTask* task);
 
 private:
     pthread_mutex_t mutex__;
     pthread_cond_t cond__;
-    std::shared_ptr<std::queue<T> > queue__;
+    std::shared_ptr<std::queue<NKTask*> > queue__;
 };
 
-template<class T>
-int NKQueue<T>::reserve(int size) {
+int NKQueue::reserve(int size) {
     queue__->reserve(size);
 }
 
-template<class T>
-int NkQueue<T>::push(T& element) {
+int NKQueue::push(NKTask* element) {
     pthread_mutex_lock(&mutex__);
     queue__->push(element);
     pthread_mutex_unlock(&mutex__);
@@ -41,8 +40,7 @@ int NkQueue<T>::push(T& element) {
     return 0;
 }
 
-template<class T>
-int NkQueue<T>::pop(T& element) {
+int NKQueue::pop(NKTask* element) {
     pthread_mutex_lock(&mutex__);
     while(queue__->empty())
         pthread_cond_wait(&cond__, &mutex__);
