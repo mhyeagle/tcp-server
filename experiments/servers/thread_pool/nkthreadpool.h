@@ -7,17 +7,18 @@
 #include "nkqueue.h"
 #include "nktask.h"
 
+namespace nkserver {
 
 class NKThreadpool {
 public:
-    NKThreadpool(): threads_num__(10) {
-        queue__->reserve(1000);
+    NKThreadpool(): threads_num__(10), shutdown__(false) {
 		create_workers(10);
+        tasks__ = make_shared<NKQueue>(1000);
     }
 
-    NKThreadpool(int thread_num, int queue_size): threads_num__(thread_num) {
-        queue__->reserve(queue_size);
+    NKThreadpool(int thread_num, int queue_size): threads_num__(thread_num), shutdown__(false) {
 		create_workers(thread_num);
+        tasks__ = make_shared<NKQueue>(queue_size);
     }
 
 	static void* worker_func(void* arg);
@@ -26,9 +27,10 @@ private:
 	int create_workers(int size);
 
 private:
+    bool shutdown__;
     int threads_num__;
     std::vector<pthread_t> workers__;
-    std::shared_ptr<NKQueue<NKTask> > tasks__;
+    std::shared_ptr<NKQueue> tasks__;
 };
 
 int NKThreadpool::create_workers(int size) {
@@ -48,8 +50,10 @@ int NKThreadpool::create_workers(int size) {
 void* NKThreadpool::worker_func(void* arg) {
     while(1) {
 	    NKTask* task = queue__->pop();
-	    task->process();
+	    task->handle();
     }
+}
+
 }
 
 #endif //NK_THREADPOOL_H
