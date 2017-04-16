@@ -7,6 +7,8 @@
 
 #include "nktask.h"
 
+namespace nkserver {
+
 class NKQueue {
 public:
     NKQueue() {
@@ -18,6 +20,7 @@ public:
     NKQueue(int size) {
         //pthread_mutex_init(&mutex__, NULL);
         //pthread_cond_init(&cond__, NULL);
+        queue__ = std::make_shared<std::vector<NKTask*> >();
         queue__->reserve(size);
     }
 
@@ -32,25 +35,6 @@ private:
     std::shared_ptr<std::vector<NKTask*> > queue__;
 };
 
-int NKQueue::push(NKTask* element) {
-    pthread_mutex_lock(&mutex__);
-    queue__->push(element);
-    pthread_mutex_unlock(&mutex__);
-    pthread_cond_signal(&cond__);
-
-    return 0;
-}
-
-int NKQueue::pop(NKTask* element) {
-    pthread_mutex_lock(&mutex__);
-    while(queue__->empty())
-        pthread_cond_wait(&cond__, &mutex__);
-    size_t size = queue__->size()-1;
-    element = (*queue__)[size];
-    queue__->erase(size);
-    pthread_mutex_unlock(&mutex__);
-
-    return 0;
 }
 
 #endif //NK_QUEUE_H
