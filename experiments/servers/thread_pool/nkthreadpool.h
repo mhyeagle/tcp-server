@@ -17,7 +17,7 @@ public:
         results__ = make_shared<NKQueue>(1000);
     }
 
-    NKThreadpool(int thread_num, int queue_size): threads_num__(thread_num), shutdown__(false) {
+    NKThreadpool(int thread_num, int queue_size = 100): threads_num__(thread_num), shutdown__(false) {
         create_workers(thread_num);
         tasks__ = make_shared<NKQueue>(queue_size);
         results__ = make_shared<NKQueue>(queue_size);
