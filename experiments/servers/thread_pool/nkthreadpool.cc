@@ -3,7 +3,14 @@
 namespace nkserver {
 
 NKThreadpool::~NKThreadpool() {
+	shutdown();
+}
 
+void NKThreadpool::shutdown() {
+	shutdown__ = true;
+	for(int i = 0; i < threads_num__; ++i) {
+		pthread_join(&workers__[i]);
+	}
 }
 
 int NKThreadpool::create_workers(int size) {

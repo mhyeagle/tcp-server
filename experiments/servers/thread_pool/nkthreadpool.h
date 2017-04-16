@@ -26,6 +26,7 @@ public:
 	virtual ~NKThreadpool();
 
 	static void* worker_func(void* arg);
+	void shutdown();
 
 private:
 	int create_workers(int size);
