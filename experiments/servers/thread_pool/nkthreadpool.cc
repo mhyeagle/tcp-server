@@ -1,3 +1,4 @@
+#include <iostream>
 #include "nkthreadpool.h"
 
 namespace nkserver {
@@ -9,7 +10,7 @@ NKThreadpool::~NKThreadpool() {
 void NKThreadpool::shutdown() {
     shutdown__ = true;
     for(int i = 0; i < threads_num__; ++i) {
-        pthread_join(&workers__[i]);
+        pthread_join(workers__[i], NULL);
     }
 }
 
@@ -17,7 +18,7 @@ int NKThreadpool::create_workers(int size) {
     pthread_t threadid;
     int ret = 0;
     for(int i = 0; i < size; ++i) {
-        ret = pthread_create(&threadid, NULL, worker_func, NULL);
+        ret = pthread_create(&threadid, NULL, worker_func, this);
         if (ret) {
             std::cout << "pthread_create failed." << std::endl;
             exit(1);
@@ -28,6 +29,13 @@ int NKThreadpool::create_workers(int size) {
 }
 
 void* NKThreadpool::worker_func(void* arg) {
+    NKThreadpool* p_threadpool = static_cast<NKThreadpool*>(arg);
+    p_threadpool->process();
+    
+    return 0;
+}
+
+void NKThreadpool::process() {
     while(shutdown__ == false) {
         NKTask* task = NULL;
         int ret = tasks__->pop(task);
@@ -49,7 +57,7 @@ void* NKThreadpool::worker_func(void* arg) {
         }
     }
 
-    pthread_exit();
+    pthread_exit(NULL);
 }
 
 int NKThreadpool::get_result(NKTask* task) {

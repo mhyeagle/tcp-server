@@ -13,19 +13,20 @@ class NKThreadpool {
 public:
     NKThreadpool(): threads_num__(10), shutdown__(false) {
         create_workers(10);
-        tasks__ = make_shared<NKQueue>(1000);
-        results__ = make_shared<NKQueue>(1000);
+        tasks__ = std::make_shared<NKQueue>(1000);
+        results__ = std::make_shared<NKQueue>(1000);
     }
 
     NKThreadpool(int thread_num, int queue_size = 100): threads_num__(thread_num), shutdown__(false) {
         create_workers(thread_num);
-        tasks__ = make_shared<NKQueue>(queue_size);
-        results__ = make_shared<NKQueue>(queue_size);
+        tasks__ = std::make_shared<NKQueue>(queue_size);
+        results__ = std::make_shared<NKQueue>(queue_size);
     }
 
     virtual ~NKThreadpool();
 
     static void* worker_func(void* arg);
+    void process();
     int get_result(NKTask* task);
     void shutdown();
 
@@ -33,8 +34,8 @@ private:
     int create_workers(int size);
 
 private:
-    bool shutdown__;
     int threads_num__;
+    bool shutdown__;
     std::vector<pthread_t> workers__;
     std::shared_ptr<NKQueue> tasks__;
     std::shared_ptr<NKQueue> results__;
