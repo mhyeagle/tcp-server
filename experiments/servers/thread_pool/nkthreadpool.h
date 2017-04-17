@@ -26,6 +26,7 @@ public:
     virtual ~NKThreadpool();
 
     static void* worker_func(void* arg);
+    int get_result(NKTask* task);
     void shutdown();
 
 private:

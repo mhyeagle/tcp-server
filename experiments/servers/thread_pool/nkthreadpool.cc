@@ -52,6 +52,17 @@ void* NKThreadpool::worker_func(void* arg) {
     pthread_exit();
 }
 
+int NKThreadpool::get_result(NKTask* task) {
+    int ret = 0;
+    ret = results__->pop(task);
+    if (ret) {
+        //std::cout << "pop from results__ failed." << std::endl;
+        return ret;
+    }
+
+    return ret;
+}
+
 }
 
 
