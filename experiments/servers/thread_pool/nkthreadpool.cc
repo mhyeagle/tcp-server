@@ -60,12 +60,21 @@ void NKThreadpool::process() {
     pthread_exit(NULL);
 }
 
+int NKThreadpool::push_task(NKTask* task) {
+    int ret = 0;
+    ret = tasks__->push(task);
+    if (ret) {
+        //std::cout << "push to tasks__ failed." << std::endl;
+    }
+
+    return ret;
+}
+
 int NKThreadpool::get_result(NKTask* task) {
     int ret = 0;
     ret = results__->pop(task);
     if (ret) {
         //std::cout << "pop from results__ failed." << std::endl;
-        return ret;
     }
 
     return ret;

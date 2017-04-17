@@ -12,7 +12,7 @@ using namespace nkserver;
 class TaskTest : public NKTask {
 public:
     TaskTest() : num__(10), name__("") {}
-    ~TaskTest();
+    ~TaskTest() {}
 
     int handle() {
         pthread_t pid = pthread_self();

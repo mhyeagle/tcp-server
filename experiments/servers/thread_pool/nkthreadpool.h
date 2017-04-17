@@ -27,6 +27,8 @@ public:
 
     static void* worker_func(void* arg);
     void process();
+
+    int push_task(NKTask* task);
     int get_result(NKTask* task);
     void shutdown();
 

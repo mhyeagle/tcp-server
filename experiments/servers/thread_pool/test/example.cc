@@ -11,7 +11,7 @@ int main() {
     NKThreadpool* thread_pool_test = new NKThreadpool(10, 100);
     TaskTest works[10];
     for(int i = 0; i < 10; ++i) {
-        thread_pool_test->push(&works[i]);
+        thread_pool_test->push_task(&works[i]);
     }
 
     TaskTest* task = NULL;

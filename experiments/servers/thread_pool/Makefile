@@ -13,8 +13,7 @@ LDFLAGS += -L..
 LIBOBJS=nkthreadpool.o \
 		nkqueue.o
 
-TESTOBJS=./test/example.o \
-		 ./test/task_test.o
+TESTOBJS=./test/example.o
 
 #------------------------------------------------------------------
 all: $(TARGET) $(TESTR)
