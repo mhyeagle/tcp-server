@@ -9,7 +9,7 @@ using namespace std;
 using namespace nkserver;
 
 int main() {
-    NKThreadpool* thread_pool_test = new NKThreadpool(1, 100);
+    NKThreadpool* thread_pool_test = new NKThreadpool(10, 100);
     TaskTest works[10];
     for(int i = 0; i < 10; ++i) {
         works[i].output();

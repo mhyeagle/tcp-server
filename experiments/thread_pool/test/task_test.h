@@ -27,7 +27,7 @@ public:
     }
 
 private:
-    int num__;
+    unsigned long num__;
     std::string name__;
 };
 
