@@ -7,7 +7,7 @@
 #include <pthread.h>
 #include "nktask.h"
 
-using namespace nkserver;
+namespace nkserver {
 
 class TaskTest : public NKTask {
 public:
@@ -17,7 +17,7 @@ public:
     int handle() {
         pthread_t pid = pthread_self();
         num__ = pid;
-        usleep(100000);
+        sleep(1);
         return 0;
     }
 
@@ -30,5 +30,7 @@ private:
     int num__;
     std::string name__;
 };
+
+}
 
 #endif //TEST_TASK_H__

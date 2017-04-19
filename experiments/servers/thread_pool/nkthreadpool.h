@@ -12,15 +12,27 @@ namespace nkserver {
 class NKThreadpool {
 public:
     NKThreadpool(): threads_num__(10), shutdown__(false) {
-        create_workers(10);
         tasks__ = std::make_shared<NKQueue>(1000);
+        if (tasks__ == NULL) {
+            std::cout << "create tasks queue failed." << std::endl;
+        }
         results__ = std::make_shared<NKQueue>(1000);
+        if (results__ == NULL) {
+            std::cout << "create results queue failed." << std::endl;
+        }
+        create_workers(10);
     }
 
     NKThreadpool(int thread_num, int queue_size = 100): threads_num__(thread_num), shutdown__(false) {
-        create_workers(thread_num);
         tasks__ = std::make_shared<NKQueue>(queue_size);
+        if (tasks__ == NULL) {
+            std::cout << "create tasks queue failed." << std::endl;
+        }
         results__ = std::make_shared<NKQueue>(queue_size);
+        if (results__ == NULL) {
+            std::cout << "create results queue failed." << std::endl;
+        }
+        create_workers(thread_num);
     }
 
     virtual ~NKThreadpool();
@@ -29,7 +41,7 @@ public:
     void process();
 
     int push_task(NKTask* task);
-    int get_result(NKTask* task);
+    int get_result(NKTask** task);
     void shutdown();
 
 private:

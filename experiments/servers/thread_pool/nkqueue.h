@@ -27,7 +27,7 @@ public:
     ~NKQueue() {}
 
     int push(NKTask* task);
-    int pop(NKTask* task);
+    int pop(NKTask** task);
 
 private:
     pthread_mutex_t mutex__ = PTHREAD_MUTEX_INITIALIZER;

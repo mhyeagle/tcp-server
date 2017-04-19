@@ -38,7 +38,7 @@ void* NKThreadpool::worker_func(void* arg) {
 void NKThreadpool::process() {
     while(shutdown__ == false) {
         NKTask* task = NULL;
-        int ret = tasks__->pop(task);
+        int ret = tasks__->pop(&task);
         if (ret) {
             //std::cout << "get task from tasks__ failed." << std::endl;
             continue;
@@ -70,7 +70,7 @@ int NKThreadpool::push_task(NKTask* task) {
     return ret;
 }
 
-int NKThreadpool::get_result(NKTask* task) {
+int NKThreadpool::get_result(NKTask** task) {
     int ret = 0;
     ret = results__->pop(task);
     if (ret) {
