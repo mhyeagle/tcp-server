@@ -125,7 +125,7 @@ int main(int argc, char **argv) {
 
     epoll_event events[MAX_EVENT_NUMBER];
     while(1) {
-        ret = epoll_wait(epfd, events, MAX_EVENT_NUMBER, 0);
+        ret = epoll_wait(epfd, events, MAX_EVENT_NUMBER, -1);
         if (ret < 0) {
             printf("epoll_wait failed.\n");
             break;
