@@ -113,7 +113,7 @@ int main(int argc, char** argv) {
                 socklen_t len = sizeof(addr_cli);
                 int connfd = accept(listenfd, (struct sockaddr*)&addr_cli, &len);
                 addfd(epfd, connfd, true);
-            } else if (events[i].data.fd && EPOLLIN) {
+            } else if (events[i].events && EPOLLIN) {
                 pthread_t pid;
                 fds fds_for_new_worker;
                 fds_for_new_worker.epfd = epfd;
